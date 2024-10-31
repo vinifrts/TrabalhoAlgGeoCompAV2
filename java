@@ -209,23 +209,25 @@ public class Transformations {
 
             case "3": // Rotação 2D
                 vector = parseInputVector(scanner, 2);
-                System.out.print("Qual o ângulo em radianos: ");
-                double angle = scanner.nextDouble();
-                displayResult(rotation2D(vector, angle));
+                System.out.print("Qual o ângulo em graus: ");
+                double angleDegrees2D = scanner.nextDouble();
+                double angle2D = Math.toRadians(angleDegrees2D); // Converte para radianos
+                displayResult(rotation2D(vector, angle2D));
                 break;
 
             case "4": // Rotação 3D
                 vector = parseInputVector(scanner, 3);
-                System.out.print("Qual o ângulo em radianos: ");
-                angle = scanner.nextDouble();
+                System.out.print("Qual o ângulo em graus: ");
+                double angleDegrees3D = scanner.nextDouble();
+                double angle3D = Math.toRadians(angleDegrees3D); // Converte para radianos
                 System.out.print("Escolha o eixo de rotação (X, Y, ou Z): ");
                 char axis = scanner.next().toUpperCase().charAt(0);
                 if (axis == 'X') {
-                    displayResult(rotation3DX(vector, angle));
+                    displayResult(rotation3DX(vector, angle3D));
                 } else if (axis == 'Y') {
-                    displayResult(rotation3DY(vector, angle));
+                    displayResult(rotation3DY(vector, angle3D));
                 } else if (axis == 'Z') {
-                    displayResult(rotation3DZ(vector, angle));
+                    displayResult(rotation3DZ(vector, angle3D));
                 } else {
                     System.out.println("Inválido.");
                 }
@@ -283,7 +285,6 @@ public class Transformations {
         }
         scanner.close();
     }
-
     // Exibir o resultado
     private static void displayResult(double[] result) {
         System.out.print("Resultado: ");
@@ -308,7 +309,3 @@ public class Transformations {
         userInterface();
     }
 }
-
-
-
-
