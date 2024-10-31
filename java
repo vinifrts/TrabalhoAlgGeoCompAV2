@@ -2,7 +2,7 @@ import java.util.Scanner;
 
 public class Transformations {
 
-    // translação 2D usando coordenadas homogêneas (naoki)
+    // translação 2D (naoki)
     public static double[] translate2D(double[] vector, double dx, double dy) {
         double[][] matrizTranslacao = {
                 {1, 0, dx},
@@ -12,7 +12,7 @@ public class Transformations {
         return multiplicarMatrizVetor(matrizTranslacao, new double[]{vector[0], vector[1], 1});
     }
 
-    // translação 3D usando coordenadas homogêneas (naoki)
+    // translação 3D(naoki)
     public static double[] translate3D(double[] vector, double dx, double dy, double dz) {
         double[][] matrizTranslacao = {
                 {1, 0, 0, dx},
@@ -23,7 +23,7 @@ public class Transformations {
         return multiplicarMatrizVetor(matrizTranslacao, new double[]{vector[0], vector[1], vector[2], 1});
     }
 
-    // rotação 2D usando coordenadas homogêneas (rotação)
+    // rotação 2D  (kaue)
     public static double[] rotation2D(double[] vector, double angle) {
         double cosA = Math.cos(angle);
         double sinA = Math.sin(angle);
@@ -35,7 +35,7 @@ public class Transformations {
         return multiplicarMatrizVetor(matrizRotacao, new double[]{vector[0], vector[1], 1});
     }
 
-    // Rotação em torno do eixo X (3D) usando coordenadas homogêneas (kaue)
+    // Rotação em torno do eixo X 3d(kaue)
     public static double[] rotation3DX(double[] vector, double angle) {
         double cosA = Math.cos(angle);
         double sinA = Math.sin(angle);
@@ -105,7 +105,7 @@ public class Transformations {
         return multiplicarMatrizVetor(matrizReflexao, new double[]{vector[0], vector[1], vector[2], 1});
     }
 
-    // Reflexão em torno do eixo XZ em 3D (vini)
+    // Reflexão eno eixo XZ em 3D (vini)
     public static double[] reflection3DXZ(double[] vector) {
         double[][] matrizReflexao = {
                 {1, 0, 0, 0},
@@ -116,7 +116,7 @@ public class Transformations {
         return multiplicarMatrizVetor(matrizReflexao, new double[]{vector[0], vector[1], vector[2], 1});
     }
 
-    // reflexao em torno do eixo YZ em 3D (vini)
+    // reflexao no eixo YZ em 3D (vini)
     public static double[] reflection3DYZ(double[] vector) {
         double[][] matrizReflexao = {
                 {-1, 0, 0, 0},
