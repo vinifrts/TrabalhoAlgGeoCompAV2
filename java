@@ -2,118 +2,174 @@ import java.util.Scanner;
 
 public class Transformations {
 
-    // Translação 2D
+    // Translação 2D usando coordenadas homogêneas
     public static double[] translate2D(double[] vector, double dx, double dy) {
-        return new double[]{vector[0] + dx, vector[1] + dy};
+        double[][] matrizTranslacao = {
+                {1, 0, dx},
+                {0, 1, dy},
+                {0, 0, 1}
+        };
+        return multiplicarMatrizVetor(matrizTranslacao, new double[]{vector[0], vector[1], 1});
     }
 
-    // Translação 3D
+    // Translação 3D usando coordenadas homogêneas
     public static double[] translate3D(double[] vector, double dx, double dy, double dz) {
-        return new double[]{vector[0] + dx, vector[1] + dy, vector[2] + dz};
+        double[][] matrizTranslacao = {
+                {1, 0, 0, dx},
+                {0, 1, 0, dy},
+                {0, 0, 1, dz},
+                {0, 0, 0, 1}
+        };
+        return multiplicarMatrizVetor(matrizTranslacao, new double[]{vector[0], vector[1], vector[2], 1});
     }
 
-    // Rotação 2D
+    // Rotação 2D usando coordenadas homogêneas
     public static double[] rotation2D(double[] vector, double angle) {
         double cosA = Math.cos(angle);
         double sinA = Math.sin(angle);
-        return new double[]{
-                vector[0] * cosA - vector[1] * sinA,
-                vector[0] * sinA + vector[1] * cosA
+        double[][] matrizRotacao = {
+                {cosA, -sinA, 0},
+                {sinA, cosA, 0},
+                {0, 0, 1}
         };
+        return multiplicarMatrizVetor(matrizRotacao, new double[]{vector[0], vector[1], 1});
     }
 
-    // Rotação em torno do eixo X (3D)
+    // Rotação em torno do eixo X (3D) usando coordenadas homogêneas
     public static double[] rotation3DX(double[] vector, double angle) {
         double cosA = Math.cos(angle);
         double sinA = Math.sin(angle);
-        return new double[]{
-                vector[0],
-                vector[1] * cosA - vector[2] * sinA,
-                vector[1] * sinA + vector[2] * cosA
+        double[][] matrizRotacao = {
+                {1, 0, 0, 0},
+                {0, cosA, -sinA, 0},
+                {0, sinA, cosA, 0},
+                {0, 0, 0, 1}
         };
+        return multiplicarMatrizVetor(matrizRotacao, new double[]{vector[0], vector[1], vector[2], 1});
     }
 
-    // Rotação em torno do eixo Y (3D)
+    // Rotação em torno do eixo Y (3D) usando coordenadas homogêneas
     public static double[] rotation3DY(double[] vector, double angle) {
         double cosA = Math.cos(angle);
         double sinA = Math.sin(angle);
-        return new double[]{
-                vector[0] * cosA + vector[2] * sinA,
-                vector[1],
-                -vector[0] * sinA + vector[2] * cosA
+        double[][] matrizRotacao = {
+                {cosA, 0, sinA, 0},
+                {0, 1, 0, 0},
+                {-sinA, 0, cosA, 0},
+                {0, 0, 0, 1}
         };
+        return multiplicarMatrizVetor(matrizRotacao, new double[]{vector[0], vector[1], vector[2], 1});
     }
 
-    // Rotação em torno do eixo Z (3D)
+    // Rotação em torno do eixo Z (3D) usando coordenadas homogêneas
     public static double[] rotation3DZ(double[] vector, double angle) {
         double cosA = Math.cos(angle);
         double sinA = Math.sin(angle);
-        return new double[]{
-                vector[0] * cosA - vector[1] * sinA,
-                vector[0] * sinA + vector[1] * cosA,
-                vector[2]
+        double[][] matrizRotacao = {
+                {cosA, -sinA, 0, 0},
+                {sinA, cosA, 0, 0},
+                {0, 0, 1, 0},
+                {0, 0, 0, 1}
         };
+        return multiplicarMatrizVetor(matrizRotacao, new double[]{vector[0], vector[1], vector[2], 1});
     }
 
-    // Reflexão sobre o eixo X em 2D
+    // Reflexão sobre o eixo X em 2D usando coordenadas homogêneas
     public static double[] reflection2DX(double[] vector) {
-        return new double[]{vector[0], -vector[1]};
-    }
-
-    // Reflexão sobre o eixo Y em 2D
-    public static double[] reflection2DY(double[] vector) {
-        return new double[]{-vector[0], vector[1]};
-    }
-
-    // Reflexão sobre o eixo X em 3D
-    public static double[] reflection3DX(double[] vector) {
-        return new double[]{vector[0], -vector[1], -vector[2]};
-    }
-
-    // Reflexão sobre o eixo Y em 3D
-    public static double[] reflection3DY(double[] vector) {
-        return new double[]{-vector[0], vector[1], -vector[2]};
-    }
-
-    // Reflexão sobre o eixo Z em 3D
-    public static double[] reflection3DZ(double[] vector) {
-        return new double[]{-vector[0], -vector[1], vector[2]};
-    }
-
-    // Projeção sobre o eixo X em 2D
-    public static double[] projection2DX(double[] vector) {
-        return new double[]{vector[0], 0};
-    }
-
-    // Projeção sobre o eixo Y em 2D
-    public static double[] projection2DY(double[] vector) {
-        return new double[]{0, vector[1]};
-    }
-
-    // Projeção sobre o eixo X em 3D
-    public static double[] projection3DX(double[] vector) {
-        return new double[]{vector[0], 0, 0};
-    }
-
-    // Projeção sobre o eixo Y em 3D
-    public static double[] projection3DY(double[] vector) {
-        return new double[]{0, vector[1], 0};
-    }
-
-    // Projeção sobre o eixo Z em 3D
-    public static double[] projection3DZ(double[] vector) {
-        return new double[]{0, 0, vector[2]};
-    }
-
-    // Cisalhamento em 2D
-    public static double[] shearing(double[] vector, double kx, double ky) {
-        return new double[]{
-                vector[0] + kx * vector[1],
-                vector[1] + ky * vector[0]
+        double[][] matrizReflexao = {
+                {1, 0, 0},
+                {0, -1, 0},
+                {0, 0, 1}
         };
+        return multiplicarMatrizVetor(matrizReflexao, new double[]{vector[0], vector[1], 1});
     }
 
-    // Método para leitura e escolha de transformações
+    // Reflexão sobre o eixo Y em 2D usando coordenadas homogêneas
+    public static double[] reflection2DY(double[] vector) {
+        double[][] matrizReflexao = {
+                {-1, 0, 0},
+                {0, 1, 0},
+                {0, 0, 1}
+        };
+        return multiplicarMatrizVetor(matrizReflexao, new double[]{vector[0], vector[1], 1});
+    }
+
+    // Reflexão em torno do eixo XY em 3D
+    public static double[] reflection3DXY(double[] vector) {
+        double[][] matrizReflexao = {
+                {1, 0, 0, 0},
+                {0, 1, 0, 0},
+                {0, 0, -1, 0},
+                {0, 0, 0, 1}
+        };
+        return multiplicarMatrizVetor(matrizReflexao, new double[]{vector[0], vector[1], vector[2], 1});
+    }
+
+    // Reflexão em torno do eixo XZ em 3D
+    public static double[] reflection3DXZ(double[] vector) {
+        double[][] matrizReflexao = {
+                {1, 0, 0, 0},
+                {0, -1, 0, 0},
+                {0, 0, 1, 0},
+                {0, 0, 0, 1}
+        };
+        return multiplicarMatrizVetor(matrizReflexao, new double[]{vector[0], vector[1], vector[2], 1});
+    }
+
+    // Reflexão em torno do eixo YZ em 3D
+    public static double[] reflection3DYZ(double[] vector) {
+        double[][] matrizReflexao = {
+                {-1, 0, 0, 0},
+                {0, 1, 0, 0},
+                {0, 0, 1, 0},
+                {0, 0, 0, 1}
+        };
+        return multiplicarMatrizVetor(matrizReflexao, new double[]{vector[0], vector[1], vector[2], 1});
+    }
+
+    // Projeção ortogonal 2D
+    public static double[] projection2D(double[] vector) {
+        double[][] matrizProjecao = {
+                {1, 0, 0},
+                {0, 1, 0},
+                {0, 0, 0}
+        };
+        return multiplicarMatrizVetor(matrizProjecao, new double[]{vector[0], vector[1], 1});
+    }
+
+    // Projeção ortogonal 3D
+    public static double[] projection3D(double[] vector) {
+        double[][] matrizProjecao = {
+                {1, 0, 0, 0},
+                {0, 1, 0, 0},
+                {0, 0, 1, 0},
+                {0, 0, 0, 0}
+        };
+        return multiplicarMatrizVetor(matrizProjecao, new double[]{vector[0], vector[1], vector[2], 1});
+    }
+
+    // Cisalhamento 2D
+    public static double[] shear2D(double[] vector, double shx, double shy) {
+        double[][] matrizCisalhamento = {
+                {1, shx, 0},
+                {shy, 1, 0},
+                {0, 0, 1}
+        };
+        return multiplicarMatrizVetor(matrizCisalhamento, new double[]{vector[0], vector[1], 1});
+    }
+
+    // Função para multiplicar uma matriz 3x3 ou 4x4 com um vetor de coordenadas homogêneas
+    private static double[] multiplicarMatrizVetor(double[][] matriz, double[] vetor) {
+        double[] resultado = new double[matriz.length];
+        for (int i = 0; i < matriz.length; i++) {
+            for (int j = 0; j < vetor.length; j++) {
+                resultado[i] += matriz[i][j] * vetor[j];
+            }
+        }
+        return resultado;
+    }
+
+    // Interface do usuário com as opções adicionais
     public static void userInterface() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Escolha o tipo de transformação:");
@@ -133,34 +189,34 @@ public class Transformations {
         switch (choice) {
             case "1": // Translação 2D
                 vector = parseInputVector(scanner, 2);
-                System.out.print("Insira dx: ");
+                System.out.print("dx: ");
                 double dx = scanner.nextDouble();
-                System.out.print("Insira dy: ");
+                System.out.print("dy: ");
                 double dy = scanner.nextDouble();
                 displayResult(translate2D(vector, dx, dy));
                 break;
 
             case "2": // Translação 3D
                 vector = parseInputVector(scanner, 3);
-                System.out.print("Insira dx: ");
+                System.out.print("dx: ");
                 dx = scanner.nextDouble();
-                System.out.print("Insira dy: ");
+                System.out.print("dy: ");
                 dy = scanner.nextDouble();
-                System.out.print("Insira dz: ");
+                System.out.print("dz: ");
                 double dz = scanner.nextDouble();
                 displayResult(translate3D(vector, dx, dy, dz));
                 break;
 
             case "3": // Rotação 2D
                 vector = parseInputVector(scanner, 2);
-                System.out.print("Insira o ângulo em radianos: ");
+                System.out.print("Qual o ângulo em radianos: ");
                 double angle = scanner.nextDouble();
                 displayResult(rotation2D(vector, angle));
                 break;
 
             case "4": // Rotação 3D
                 vector = parseInputVector(scanner, 3);
-                System.out.print("Insira o ângulo em radianos: ");
+                System.out.print("Qual o ângulo em radianos: ");
                 angle = scanner.nextDouble();
                 System.out.print("Escolha o eixo de rotação (X, Y, ou Z): ");
                 char axis = scanner.next().toUpperCase().charAt(0);
@@ -171,7 +227,7 @@ public class Transformations {
                 } else if (axis == 'Z') {
                     displayResult(rotation3DZ(vector, angle));
                 } else {
-                    System.out.println("Eixo inválido.");
+                    System.out.println("Inválido.");
                 }
                 break;
 
@@ -190,63 +246,45 @@ public class Transformations {
 
             case "6": // Reflexão 3D
                 vector = parseInputVector(scanner, 3);
-                System.out.print("Escolha a reflexão (X, Y ou Z): ");
-                char reflectionAxis3D = scanner.next().toUpperCase().charAt(0);
-                if (reflectionAxis3D == 'X') {
-                    displayResult(reflection3DX(vector));
-                } else if (reflectionAxis3D == 'Y') {
-                    displayResult(reflection3DY(vector));
-                } else if (reflectionAxis3D == 'Z') {
-                    displayResult(reflection3DZ(vector));
+                System.out.print("Escolha o plano de reflexão (XY, XZ ou YZ): ");
+                String plane = scanner.next().toUpperCase();
+                if (plane.equals("XY")) {
+                    displayResult(reflection3DXY(vector));
+                } else if (plane.equals("XZ")) {
+                    displayResult(reflection3DXZ(vector));
+                } else if (plane.equals("YZ")) {
+                    displayResult(reflection3DYZ(vector));
                 } else {
-                    System.out.println("Eixo inválido.");
+                    System.out.println("Plano inválido.");
                 }
                 break;
 
             case "7": // Projeção 2D
                 vector = parseInputVector(scanner, 2);
-                System.out.print("Escolha a projeção (X ou Y): ");
-                char projectionAxis2D = scanner.next().toUpperCase().charAt(0);
-                if (projectionAxis2D == 'X') {
-                    displayResult(projection2DX(vector));
-                } else if (projectionAxis2D == 'Y') {
-                    displayResult(projection2DY(vector));
-                } else {
-                    System.out.println("Eixo inválido.");
-                }
+                displayResult(projection2D(vector));
                 break;
 
             case "8": // Projeção 3D
-                System.out.print("Escolha a projeção (X, Y ou Z): ");
-                char projectionAxis3D = scanner.next().toUpperCase().charAt(0);
                 vector = parseInputVector(scanner, 3);
-                if (projectionAxis3D == 'X') {
-                    displayResult(projection3DX(vector));
-                } else if (projectionAxis3D == 'Y') {
-                    displayResult(projection3DY(vector));
-                } else if (projectionAxis3D == 'Z') {
-                    displayResult(projection3DZ(vector));
-                } else {
-                    System.out.println("Eixo inválido.");
-                }
+                displayResult(projection3D(vector));
                 break;
 
             case "9": // Cisalhamento 2D
                 vector = parseInputVector(scanner, 2);
-                System.out.print("Insira kx: ");
-                double kx = scanner.nextDouble();
-                System.out.print("Insira ky: ");
-                double ky = scanner.nextDouble();
-                displayResult(shearing(vector, kx, ky));
+                System.out.print("shx: ");
+                double shx = scanner.nextDouble();
+                System.out.print("shy: ");
+                double shy = scanner.nextDouble();
+                displayResult(shear2D(vector, shx, shy));
                 break;
 
             default:
-                System.out.println("Opção inválida.");
+                System.out.println("Inválido.");
         }
         scanner.close();
     }
 
-    // Método auxiliar para exibir o resultado
+    // Exibir o resultado
     private static void displayResult(double[] result) {
         System.out.print("Resultado: ");
         for (double val : result) {
@@ -255,7 +293,7 @@ public class Transformations {
         System.out.println();
     }
 
-    // Método auxiliar para converter entrada do usuário para vetor
+    // Converter entrada do usuário para vetor
     private static double[] parseInputVector(Scanner scanner, int size) {
         System.out.print("Insira o vetor (valores separados por vírgula): ");
         String[] input = scanner.next().split(",");
@@ -270,3 +308,7 @@ public class Transformations {
         userInterface();
     }
 }
+
+
+
+
